@@ -1,0 +1,52 @@
+spring:
+  datasource:
+    url: jdbc:mysql://10.0.0.200:3306/fzu-community?serverTimezone=UTC&characterEncoding=utf-8
+    username: fzu-community
+    password: 0577e75a-8ed8
+  redis:
+    host: 127.0.0.1
+    database: 0
+    port: 6379
+    password: aslkdfjhlakhd
+  elasticsearch:
+    rest:
+      uris: http://127.0.0.1:9200
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+
+springfox:
+  documentation:
+    swagger-ui:
+      enabled: true
+
+logging:
+  file:
+    path: /var/log/${spring.application.name}/
+
+oss:
+  tmp-dir: /var/tmp/${spring.application.name}/
+  aliyun:
+    endpoint: oss-cn-hangzhou.aliyuncs.com
+    bucket-name: fzu-community
+    access-key-id: LTAI5tGN5dLiAYuQvWv59Hhw
+    access-key-secret: GKwP5QHPy1WXNH7gb4ZYF0wELFaW8l
+
+green:
+  region-id: cn-shanghai
+  endpoint: green.cn-shanghai.aliyuncs.com
+  access-key-id: LTAI5tGN5dLiAYuQvWv59Hhw
+  access-key-secret: GKwP5QHPy1WXNH7gb4ZYF0wELFaW8l
+  callback-seed: cb6qvXTCYbQ$W5mP3Aznlo2O-1vKSBV
+  user-id: 1588542010083493
+
+community:
+  cors:
+    ####### 上线更新 #######
+    allowed-origins:
+      - http://localhost:8081
+      - ws://localhost:8081
+      - http://127.0.0.1:8081
+      - ws://127.0.0.1:8081
+      - https://community.w2fzu.com
+      - ws://community.w2fzu.com
