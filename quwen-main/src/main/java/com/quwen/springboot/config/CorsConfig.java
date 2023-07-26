@@ -1,4 +1,4 @@
-package com.quwen.config;
+package com.quwen.springboot.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

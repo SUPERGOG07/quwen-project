@@ -1,0 +1,59 @@
+server:
+  port: 20235
+  max-http-header-size: 10240
+  servlet:
+    context-path: /api
+
+spring:
+  application:
+    name: quwen
+  profiles:
+    active: @spring.active@
+  servlet:
+    multipart:
+      #请求大小
+      max-request-size: 100MB
+      #文件大小
+      max-file-size: 100MB
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
+    locale: zh_CN
+    serialization:
+      #格式化输出
+      indent_output: false
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+mybatis-plus:
+  configuration:
+    #在映射实体或者属性时，将数据库中表名和字段名中的下划线去掉，按照驼峰命名法映射
+    map-underscore-to-camel-case: true
+    #二级缓存
+    cache-enabled: true
+    #懒加载
+    lazy-loading-enabled: true
+    #多数据集
+    multiple-result-sets-enabled: true
+    #日志实现
+    log-impl: org.apache.ibatis.logging.nologging.NoLoggingImpl
+  global-config:
+    #LOGO
+    banner: false
+    #sql-runner
+    enable-sql-runner: true
+    db-config:
+      id-type: assign_id
+      #逻辑删除
+      logic-delete-field: del_flag
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+
+logging:
+  file:
+    path: /var/log/quwen/springboot
+  logback:
+    rollingPolicy:
+      max-history: 7
+      max-file-size: 10MB

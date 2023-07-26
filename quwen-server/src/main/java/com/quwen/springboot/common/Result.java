@@ -1,9 +1,14 @@
 package com.quwen.springboot.common;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.google.gson.JsonObject;
+import com.quwen.springboot.util.GsonUtil;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.time.ZonedDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Result implements Serializable {
 
@@ -13,35 +18,52 @@ public class Result implements Serializable {
 
     private String errMsg;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss 'GMT'xxx", timezone = "GMT+8")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss 'GMT'xxx")
     private ZonedDateTime receiptDateTime;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss 'GMT'xxx", timezone = "GMT+8")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss 'GMT'xxx")
     private ZonedDateTime returnDateTime;
 
     private Boolean success;
 
-    private JsonObject item;
+    private Map<String,Object> item;
 
 
     public Result() {
-        this.msgCode = 0;
-        this.errMsg = "";
         this.receiptDateTime = ZonedDateTime.now();
-        this.success = true;
-        this.item = new JsonObject();
+        this.item = new HashMap<>();
+    }
+
+    public Result putItem(String key,Object value){
+        this.item.put(key,value);
+        return this;
+    }
+
+    public Result error(int msgCode,String errMsg){
+        this.msgCode = msgCode;
+        this.errMsg = errMsg;
+        this.returnDateTime = ZonedDateTime.now();
+        this.success = false;
+        return this;
+    }
+
+    public Result error(ErrorEnum errorEnum){
+        this.msgCode = errorEnum.getMsgCode();
+        this.errMsg = errorEnum.getErrMsg();
+        this.returnDateTime = ZonedDateTime.now();
+        this.success = false;
+        return this;
     }
 
     public Result success(){
-        this.receiptDateTime = ZonedDateTime.now();
+        this.error(ErrorEnum.SUCCESS);
+        this.success = true;
         return this;
     }
 
-    public Result success(String key, Object value){
-        this.receiptDateTime = ZonedDateTime.now();
-        if (null != key && null != value) {
-            this.item.addProperty(key, value.toString());
-        }
-        return this;
-    }
+
 
 
     public Integer getMsgCode() {
@@ -84,11 +106,11 @@ public class Result implements Serializable {
         this.success = success;
     }
 
-    public JsonObject getItem() {
+    public Map<String, Object> getItem() {
         return item;
     }
 
-    public void setItem(JsonObject item) {
+    public void setItem(Map<String, Object> item) {
         this.item = item;
     }
 }

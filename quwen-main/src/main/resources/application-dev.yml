@@ -1,51 +1,55 @@
 spring:
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/fzu-community?serverTimezone=UTC&characterEncoding=utf-8
-    username: fzu-community
-    password: 0577e75a-8ed8
-  redis:
-    host: 127.0.0.1
-    database: 0
-    port: 6379
-    password: aslkdfjhlakhd
-  elasticsearch:
-    rest:
-      uris: http://127.0.0.1:9200
-  rabbitmq:
-    host: 127.0.0.1
-    port: 5672
-    username: w2
-    password: w2w2w2
+    druid:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://localhost:3306/quwen?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
+      username: mysql_ljh
+      password: 123456
 
-springfox:
-  documentation:
-    swagger-ui:
-      enabled: true
+      #初始化时建立物理连接的个数
+      initial-size: 3
+      #最大连接池数量
+      max-active: 100
+      #最小连接池数量
+      min-idle: 1
+      #获取连接时最大等待时间，单位毫秒
+      max-wait: 60000
+      #PSCache对支持游标的数据库性能提升巨大，比如说oracle。在mysql下建议关闭
+      pool-prepared-statements: false
+      #指定每个连接上PSCache的大小
+      max-pool-prepared-statement-per-connection-size: 20
+      #statement池能够同时分配的打开的statements的最大数量。要启用PSCache，必须配置大于0
+      max-open-prepared-statements: 0
+      #用来检测连接是否有效的sql，要求是一个查询语句
+      validation-query: SELECT 1 FROM test
+      validation-query-timeout: 300000
+      #申请连接时执行validationQuery检测连接是否有效
+      test-on-borrow: true
+      #归还连接时执行validationQuery检测连接是否有效
+      test-on-return: true
+      #申请连接的时候检测，如果空闲时间大于timeBetweenEvictionRunsMillis，执行validationQuery检测连接是否有效
+      test-while-idle: true
+      ## 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+      time-between-eviction-runs-millis: 60000
+      ## 配置一个连接在池中最小生存的时间，单位是毫秒
+      min-evictable-idle-time-millis: 300000
+      max-evictable-idle-time-millis: 10000000
+      # 配置监控统计拦截的filters，去掉后监控界面sql无法统计，'stat'监控统计用,'wall'用于防火墙,'log4j'日志用的
+      filters: stat,wall
+      #监控配置
+      # WebStatFilter配置，说明请参考Druid Wiki，配置_配置WebStatFilter
+      web-stat-filter.enabled: true
+      web-stat-filter.url-pattern: /*
+      web-stat-filter.exclusions: "*.js,*.gif,*.jpg,*.bmp,*.png,*.css,*.ico,/druid/*"
+      # StatViewServlet配置，说明请参考Druid Wiki，配置_StatViewServlet配置
+      stat-view-servlet.enabled: true
+      stat-view-servlet.url-pattern: /druid/*
+      stat-view-servlet.reset-enable: false
+      stat-view-servlet.login-username: qwe
+      stat-view-servlet.login-password: asd
+      stat-view-servlet.allow: 192.168.1.101,127.0.0.1
+      stat-view-servlet.deny: 192.168.3.12
 
-logging:
-  file:
-    path: D:\develop\log\${spring.application.name}\
-
-oss:
-  tmp-dir: D:\develop\tmp\${spring.application.name}\
-  aliyun:
-    endpoint: oss-cn-hangzhou.aliyuncs.com
-    bucket-name: fzu-community
-    access-key-id: LTAI5tGN5dLiAYuQvWv59Hhw
-    access-key-secret: GKwP5QHPy1WXNH7gb4ZYF0wELFaW8l
-
-green:
-  region-id: cn-shanghai
-  endpoint: green.cn-shanghai.aliyuncs.com
-  access-key-id: LTAI5tGN5dLiAYuQvWv59Hhw
-  access-key-secret: GKwP5QHPy1WXNH7gb4ZYF0wELFaW8l
-  callback-seed: cb6qvXTCYbQ$W5mP3Aznlo2O-1vKSBV
-  user-id: 1588542010083493
-
-community:
-  cors:
-    allowed-origins:
-      - http://localhost:8081
-      - http://127.0.0.1:8081
-      - ws://localhost:8081
-      - ws://127.0.0.1:8081
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
